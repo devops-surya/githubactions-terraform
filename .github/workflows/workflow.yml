@@ -1,0 +1,38 @@
+name: TerraformDeploymentPipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Terraform Action to Execute'
+        required: true
+        default: 'plan'
+        type: choice
+        options:
+          - plan
+          - apply
+          - destroy
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - prod
+  pull_request:
+    branches: [ main ]
+    types: [opened, synchronize, reopened, closed]
+
+jobs:
+  deploy:
+    name: Deploy Infrastructure
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
+    uses: driveops-surya/devops-reusable-workflows/.github/workflows/environment-stages.yml@main
+    with:
+      action: ${{ inputs.action }}
+      account_id: ${{ vars.ACCOUNT_ID }}
+    secrets: inherit
