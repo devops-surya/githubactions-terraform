@@ -18,7 +18,7 @@ terraform {
 }
 
 provider "aws" {
-  region = "ap-south-1"
+  region = "us-east-1"
 }
 
 # Example 1: Basic S3 bucket
